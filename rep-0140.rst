@@ -51,19 +51,33 @@ Removing <run_depend>
 ---------------------
 
 The ``<run_depend>`` tag generated considerable confusion within the
-ROS user and developer community [6]_, [3]_.  Everyone understood that
+ROS user and developer community [3]_, [6]_.  Everyone understood that
 it was needed when a package required another to be available at
 run-time.  But, most people did not grasp the subtle transitive
 build-time dependency introduced when a header exported by a package
 included one from some other package.  In that case, the necessary
 ``<run_depend>`` tag name was quite misleading.
 
+Creating specific tags for those two different meanings reduces
+confusion, and improves packaging efficiency because
+``<devel_depend>`` normally resolves to a development package, while
+``<exec_depend>`` generally refers to a run-time binary package.
+Although most existing ROS components are not divided into development
+and run-time packages, many system dependencies *are* separated in
+that way.  The new tags can take advantage of it immediately.
+
+With the new tags defined, ``<run_depend>`` was no longer needed.
+Removing it draws attention to the former confusion and helps resolve
+it correctly.  When each package is upgraded from format one to this
+new specification, ``<run_depend>`` must be converted to one or both
+of the new tags, as appropriate.
+
 Adding <depend>
 ---------------
 
 TBD
 
-[6]_, [3]_
+[3]_, [6]_
 
 
 Data representation
