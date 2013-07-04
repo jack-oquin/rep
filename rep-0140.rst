@@ -1,4 +1,4 @@
-REP: 127
+REP: 140
 Title: Package manifest format two specification
 Author: Dirk Thomas, Jack O'Quin
 Status: Draft
@@ -29,18 +29,16 @@ catkin build system.
 Motivation
 ==========
 
-Overall, the format one package definition has worked well.  Hundreds
-of packages were converted from rosbuild to catkin using that
-interface.  But, experience has revealed some areas that need
-improvement.
+Overall, the intial package definition worked well.  Hundreds of
+packages were converted from rosbuild to catkin using that interface.
+But, experience has revealed some areas needing improvement.
 
 The biggest problem was user confusion due to the two meanings of the
 ``<run_depend>`` tag.  Replacing it with ``<exec_depend>`` and
 ``<devel_depend>`` makes the semantics of both types much clearer.
 
-Another lesser issue was the need to declare most ROS package
-dependencies twice, using both ``<run_depend>`` and
-``<build_depend>``.
+A lesser issue was the need to declare most ROS package dependencies
+twice, using both ``<run_depend>`` and ``<build_depend>``.
 
 
 Rationale
@@ -52,12 +50,20 @@ which is not repeated here.
 Removing <run_depend>
 ---------------------
 
-TBD
+The ``<run_depend>`` tag generated considerable confusion within the
+ROS user and developer community [6]_, [3]_.  Everyone understood that
+it was needed when a package required another to be available at
+run-time.  But, most people did not grasp the subtle transitive
+build-time dependency introduced when a header exported by a package
+included one from some other package.  In that case, the necessary
+``<run_depend>`` tag name was quite misleading.
 
 Adding <depend>
 ---------------
 
 TBD
+
+[6]_, [3]_
 
 
 Data representation
@@ -559,20 +565,22 @@ References
 
 .. [1] REP-0127
    (http://ros.org/reps/rep-0127)
-.. [2] Naming conventions
+.. [2] ROS naming conventions
    (http://www.ros.org/wiki/Naming)
+.. [3] ros-infrastructure/catkin_pkg#43: `"add support for depend tag"
+   <https://github.com/ros-infrastructure/catkin_pkg/pull/43>`_
 .. [4] Declaring relationships between packages (Debian Policy Manual)
    (http://www.debian.org/doc/debian-policy/ch-relationships.html)
 .. [5] Advanced RPM Packaging (Fedora Documentation)
    (http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch-advanced-packaging.html)
-.. [7] Discussion on the buildsystem mailing list
-   (https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/_jRvhXFfsVk)
-.. [8] Discussion on the buildsystem mailing list (regarding
-   package dependencies and relationships)
-   (https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/fXGSZG0SC08)
-.. [9] Buildsystem mailing list discussion about different types of
-   package dependencies
-   (https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/HKgOrdu1OO0)
+.. [6] Buildsystem mailing list discussion: `"adding <depend> syntax to package.xml"
+   <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/j47jBnpEUnI>`_
+.. [7] Buildsystem mailing list discussion: `"Request for comment REP 127"
+   <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/_jRvhXFfsVk>`_
+.. [8] Buildsystem mailing list discussion: `"Dependency tag types for REP 127"
+   <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/fXGSZG0SC08>`_
+.. [9] Buildsystem mailing list discussion: `"dev/non-dev packages and required meta information:
+   <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/HKgOrdu1OO0>`_
 
 Copyright
 =========
