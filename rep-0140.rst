@@ -383,7 +383,7 @@ Attributes
 Declares a rosdep key or ROS package name that this package needs as
 part of some build interface it exports.
 
-The ``<devel_depend>`` declares a transitive build dependencies.  A
+The ``<devel_depend>`` declares a transitive build dependency.  A
 common example is when one of your dependencies provides a header file
 included in some header exported by your package.  Even if your
 package does not use that header when building itself, other packages
