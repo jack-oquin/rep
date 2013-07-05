@@ -51,17 +51,17 @@ Removing <run_depend>
 ---------------------
 
 The ``<run_depend>`` tag generated considerable confusion within the
-ROS user and developer community [3]_, [6]_.  Everyone understood that
+ROS user and developer community [3]_.  Everyone understood that
 it was needed when a package required another to be available at
 run-time.  But, most people did not grasp the subtle transitive
 build-time dependency introduced when a header exported by a package
-included one from some other package.  In that case, the necessary
+included one from some other package.  In that case, the required
 ``<run_depend>`` tag name was quite misleading.
 
 Creating specific tags for those two different meanings reduces
 confusion, and improves packaging efficiency because
 ``<devel_depend>`` normally resolves to a development package, while
-``<exec_depend>`` generally refers to a run-time binary package.
+``<exec_depend>`` generally refers to a run-time binary package [8]_.
 Although most existing ROS components are not divided into development
 and run-time packages, many system dependencies *are* separated in
 that way.  The new tags can take advantage of it immediately.
@@ -75,13 +75,26 @@ of the new tags, as appropriate.
 Adding <depend>
 ---------------
 
-TBD
+Very few ROS packages have been split into separate development and
+run-time packages.  So, most ROS package dependencies must repeat the
+same name in several tags, typically ``<build_depend>`` and
+``<run_depend>``.  With ``<run_depend>`` now divided into
+``<devel_depend>`` and ``<exec_depend>``, that problem gets worse.
 
-[3]_, [6]_
+The ``<depend>`` tag eliminates the repetition, combining all those
+dependencies into one [3]_.  While ``<depend>`` can be misused [6]_,
+it is good to have when appropriate.
 
 
 Data representation
 ===================
+
+The package manifest is an XML file, with restricted syntax.
+
+The only top-level element allowed is ``<package>``.  Immediately
+subordinate to that are several required or optional elements, defined
+here.  No other tags are permitted directly under the ``<package>``
+element.
 
 <package format="2">
 --------------------
@@ -103,8 +116,7 @@ Attributes
 Required Tags
 -------------
 
-The required set of tags in a ``package.xml`` file provides basic
-meta-data about the package:
+The required tags in a ``package.xml`` file provide package meta-data:
 
  * `\<name\>`_
  * `\<version\>`_
@@ -118,23 +130,17 @@ Optional Tags
 Meta-information
 ''''''''''''''''
 
-We strongly recommend the ``<url>`` tag, pointing users to a website
-and a bug tracker where they can find more information and give
-feedback about the package.  The website is commonly a wiki page on
-``ros.org`` where users can find and update information about the
-package.
+Optional, but recommended, meta-data include the names of the original
+authors and links to support documentation.
 
  * `\<url\> (multiple)`_
-
-Furthermore, authors can be given credit:
-
  * `\<author\> (multiple)`_
 
 Dependencies
 ''''''''''''
 
 The dependencies and relations to other packages and system packages
-have been discussed in [8]_ and are described using:
+have been discussed in [7]_ and are described using:
 
  * `\<build_depend\> (multiple)`_
  * `\<buildtool_depend\> (multiple)`_
@@ -203,11 +209,10 @@ Example
 <name>
 ------
 
-The name of the package consisting only of lower case alphanumeric
-characters and underscores and must start with a letter [2]_.  The
-package name must be unique within the ROS ecosystem.  It may differ
-from the folder name where it is checked out, but using the same name
-for that folder is recommended.
+The package name must start with a letter and contain only lowercase
+alphabetic, numeric or underscore characters [2]_.  The package name
+should be unique within the ROS community.  It may differ from the
+folder name into which it is checked out, but that is *not* recommended.
 
 
 <version>
@@ -280,7 +285,12 @@ Commonly used license strings:
 <url> (multiple)
 ----------------
 
-The URL to a website, a bug tracker or anything else for the package.
+A Uniform Resource Locator for the package's website, bug tracker or
+source repository.
+
+It is a good idea to include ``<url>`` tags pointing users to these
+resources.  The website is commonly a wiki page on ``ros.org`` where
+users can find and update information about the package.
 
 Attributes
 ''''''''''
@@ -563,15 +573,13 @@ Modifications to REP-0127
  * ``<depend>`` was added as a synonym for ``<build_depend>``,
    ``<devel_depend>`` and ``<exec_depend>``.
 
- * ``<test_depend>`` can coexist with ``<build_depend>``.
-
 Backward compatibility
 ----------------------
 
-TBD
-
-Format one packages following REP-0127 [1]_ are not affected until
-they are updated to declare ``<package format="2">``
+Format one packages following REP-0127 [1]_ are not affected unless
+they are updated to declare ``<package format="2">``, at which time
+all ``<run_depend>`` elements must be removed and replaced with other
+appropriate dependencies.
 
 
 References
@@ -580,7 +588,7 @@ References
 .. [1] REP-0127
    (http://ros.org/reps/rep-0127)
 .. [2] ROS naming conventions
-   (http://www.ros.org/wiki/Naming)
+   (http://www.ros.org/wiki/ROS/Patterns/Conventions#Naming_ROS_Resources)
 .. [3] ros-infrastructure/catkin_pkg#43: `"add support for depend tag"
    <https://github.com/ros-infrastructure/catkin_pkg/pull/43>`_
 .. [4] Declaring relationships between packages (Debian Policy Manual)
@@ -589,11 +597,9 @@ References
    (http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch-advanced-packaging.html)
 .. [6] Buildsystem mailing list discussion: `"adding <depend> syntax to package.xml"
    <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/j47jBnpEUnI>`_
-.. [7] Buildsystem mailing list discussion: `"Request for comment REP 127"
-   <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/_jRvhXFfsVk>`_
-.. [8] Buildsystem mailing list discussion: `"Dependency tag types for REP 127"
+.. [7] Buildsystem mailing list discussion: `"Dependency tag types for REP 127"
    <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/fXGSZG0SC08>`_
-.. [9] Buildsystem mailing list discussion: `"dev/non-dev packages and required meta information:
+.. [8] Buildsystem mailing list discussion: `"dev/non-dev packages and required meta information:
    <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/HKgOrdu1OO0>`_
 
 Copyright
