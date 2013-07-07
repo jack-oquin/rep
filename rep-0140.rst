@@ -192,9 +192,9 @@ Example
 
     <depend>roscpp</depend>
 
-    <build_depend>libboost-thread-dev</build_depend>
-    <devel_depend>libboost-thread-dev</devel_depend>
-    <exec_depend>libboost-thread</exec_depend>
+    <build_depend>libgstreamer0.10-dev</build_depend>
+    <devel_depend>libgstreamer0.10-dev</devel_depend>
+    <exec_depend>libgstreamer0.10-0</exec_depend>
 
     <test_depend>gtest</test_depend>
 
