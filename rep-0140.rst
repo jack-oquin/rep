@@ -493,7 +493,15 @@ package and message generation tasks.
 '''''''''''''''''''''''''''
 
 This empty tag indicates that your package contains no
-architecture-specific files.
+architecture-specific files.  That information is intended for future
+use, the current ROS packaging tools and build farm ignore it.
+
+Specifying ``<architecture_independent/>`` is recommended for
+metapackages and for packages defining only ROS messages and services.
+Python-only packages are reasonable candidates, too.  
+
+Be sure to remove this tag if some subsequent update adds
+architecture-dependent targets to a formerly independent package.
 
 <deprecated>
 ''''''''''''
