@@ -85,6 +85,30 @@ The ``<depend>`` tag eliminates the repetition, combining all those
 dependencies into one [3]_.  While ``<depend>`` can be misused [6]_,
 it is good to have when appropriate.
 
+Disabling unit tests
+--------------------
+
+Formerly, catkin unit tests were not cleanly separated from the rest
+of the package.  There are sometimes reasons to build a package
+without its tests or their dependencies.  For generated Debian or RPM
+packages they would not run anyway, and should not be installed.  When
+building from source for small embedded systems, disabling the tests
+reduces the number of dependencies which must also be built and
+installed.
+
+The solution adopted introduces two CMake configuration variables:
+
+ * ``CATKIN_ENABLE_TESTING`` controls whether the tests will be built.
+   Packages should test this variable within their ``CMakeLists.txt``,
+   to ensure that no test artifacts are built.
+
+ * ``CATKIN_SKIP_TESTING`` can be used to build without tests even for
+   packages created before ``CATKIN_ENABLE_TESTING`` became available.
+   This option does not build as efficiently, and may display warning
+   messages during the build.  It is a migration aid, for use while
+   packages are being upgraded to explicitly enable and disable
+   testing themselves.
+
 
 Data representation
 ===================
@@ -434,13 +458,14 @@ package also declared using a ``<build_depend>``,
 ``<buildtool_depend>``, ``<devel_depend>`` or ``<exec_depend>``.
 
 All tests and their dependencies will be built if the CMake variables
-``CATKIN_ENABLE_TESTING=1`` and ``CATKIN_SKIP_TESTING=0``.  It is best
-for the ``CMakeLists.txt`` to only define its test targets when
+``CATKIN_ENABLE_TESTING=1`` and ``CATKIN_SKIP_TESTING=0``, the default
+settings. ``CMakeLists.txt`` should only define its test targets when
 ``CATKIN_ENABLE_TESTING=1`` [9]_.
 
 When building with testing enabled, the ``<test_depend>`` packages are
-available for both building the tests and running them.  Generated
-Debian packages are built without unit tests or their dependencies.
+available for configuring and building the tests as well as running
+them.  Generated Debian packages are built without the unit tests or
+their dependencies.
 
 Attributes
 ''''''''''
@@ -591,6 +616,9 @@ Modifications to REP-0127
 
  * ``<depend>`` was added as a synonym for ``<build_depend>``,
    ``<devel_depend>`` and ``<exec_depend>``.
+
+ * ``<test_depend>`` now fulfills configuration and build-time test
+   requirements in addition to the objects needed for running them.
 
 Backward compatibility
 ----------------------
