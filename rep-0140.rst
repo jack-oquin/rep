@@ -425,14 +425,19 @@ Attributes
 <test_depend> (multiple)
 ------------------------
 
-Declares a rosdep key or ROS package name that your package needs for
-running its unit tests.
+Declares a rosdep key or ROS package name that your package only needs
+for running its unit tests.  A ``<test_depend>`` may not reference any
+package also declared using a ``<build_depend>``,
+``<buildtool_depend>``, ``<devel_depend>`` or ``<exec_depend>``.
 
-A ``<test_depend>`` may not reference any package also declared using
-a ``<build_depend>``, ``<buildtool_depend>``, ``<devel_depend>`` or
-``<exec_depend>``.
+All tests and their dependencies will be built if the CMake variables
+``CATKIN_ENABLE_TESTING=1`` and ``CATKIN_SKIP_TESTING=0``.  It is best
+for the ``CMakeLists.txt`` to only define its test targets when
+``CATKIN_ENABLE_TESTING=1`` [9]_.
 
-.. warning:: It makes sense to permit ``<build_depend>``, too, should we?
+When building with testing enabled, the ``<test_depend>`` packages are
+available for both building the tests and running them.  Generated
+Debian packages are built without unit tests or their dependencies.
 
 Attributes
 ''''''''''
@@ -608,8 +613,10 @@ References
    <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/j47jBnpEUnI>`_
 .. [7] Buildsystem mailing list discussion: `"Dependency tag types for REP 127"
    <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/fXGSZG0SC08>`_
-.. [8] Buildsystem mailing list discussion: `"dev/non-dev packages and required meta information:
+.. [8] Buildsystem mailing list discussion: `"dev/non-dev packages and required meta information"
    <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/HKgOrdu1OO0>`_
+.. [9] Buildsystem mailing list discussion: `"REP-0140: internal review"
+   <https://groups.google.com/forum/?fromgroups=#!topic/ros-sig-buildsystem/_QVFLQi-6wk>`_
 
 Copyright
 =========
