@@ -493,8 +493,9 @@ package and message generation tasks.
 '''''''''''''''''''''''''''
 
 This empty tag indicates that your package contains no
-architecture-specific files.  That information is intended for future
-use, the current ROS packaging tools and build farm ignore it.
+architecture-specific files.  That information is intended for
+possible future use, the current ROS packaging tools and build farm
+ignore it.
 
 Specifying ``<architecture_independent/>`` is recommended for
 metapackages and for packages defining only ROS messages and services.
